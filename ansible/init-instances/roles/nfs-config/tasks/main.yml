@@ -1,0 +1,25 @@
+---
+- name: Instalar o NFS Kernel Server
+  ansible.builtin.apt:
+    name: nfs-kernel-server
+    state: present
+  become: yes
+
+- name: Criar diretório compartilhado
+  ansible.builtin.file:
+    path: /nfs/winov-data
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: '0777'
+  become: yes
+
+- name: Configurar exportações NFS
+  ansible.builtin.template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reiniciar NFS Kernel Server
+  become: yes

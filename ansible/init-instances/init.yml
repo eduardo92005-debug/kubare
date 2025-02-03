@@ -1,0 +1,10 @@
+---
+- hosts: nfs_servers
+  become: yes
+  roles:
+    - nfs-config
+
+- hosts: nodes
+  become: yes
+  roles:
+    - ssh-config

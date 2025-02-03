@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: winovk8s-app
+  namespace: winovk8s
+  labels:
+    app: winovk8s
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: winovk8s
+  template:
+    metadata:
+      labels:
+        app: winovk8s
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+        - name: consul
+          image: hashicorp/consul:latest
+          ports:
+            - containerPort: 8500
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: winovk8s
+spec:
+  selector:
+    app: winovk8s
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-service
+  namespace: winovk8s
+spec:
+  selector:
+    app: winovk8s
+  ports:
+    - port: 8500
+      targetPort: 8500
+      protocol: TCP
+  type: LoadBalancer
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: winovk8s-ingress
+  namespace: winovk8s
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+    - host: winovk8s.example.com
+      http:
+        paths:
+          - path: /nginx
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service
+                port:
+                  number: 80
+          - path: /consul
+            pathType: Prefix
+            backend:
+              service:
+                name: consul-service
+                port:
+                  number: 8500
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: winov-data
+  namespace: default
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
