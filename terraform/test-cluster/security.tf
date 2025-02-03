@@ -28,7 +28,7 @@ resource "google_compute_firewall" "allow_k3s_ports" {
 
   allow {
     protocol = "tcp"
-    ports    = ["6443", "2379", "2380", "10250", "10251", "10252", "30000-32767"] # Portas do Kubernetes
+    ports    = ["6443", "2379", "2380", "10250", "10251", "10252", "30000-32767"]
   }
 
   source_ranges = ["0.0.0.0/0"]

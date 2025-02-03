@@ -18,3 +18,12 @@ variable "instances_workers" {
     { name = "k3s-node-2", machine_type = "e2-medium" }
   ]
 }
+
+variable "service_accout_email" {
+  type = string
+  sensitive = true
+}
+
+variable "pub_directory" {
+  type = string
+}

@@ -18,12 +18,12 @@ resource "google_compute_instance" "k3s-masters" {
   }
 
   metadata = {
-    ssh-keys = "user:${file("C:/Users/Eduardo/.ssh/id_rsa.pub")}"
+    ssh-keys = "user:${file(var.pub_directory)}"
   }
 
 
   service_account {
-    email  = "843462201394-compute@developer.gserviceaccount.com"
+    email  = var.service_account_email
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 }
@@ -48,12 +48,12 @@ resource "google_compute_instance" "k3s-workers" {
   }
 
   metadata = {
-    ssh-keys = "user:${file("C:/Users/Eduardo/.ssh/id_rsa.pub")}"
+    ssh-keys = "user:${file(var.pub_directory)}"
   }
 
 
   service_account {
-    email  = "843462201394-compute@developer.gserviceaccount.com"
+    email  = var.service_account_email
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 }
@@ -77,11 +77,11 @@ resource "google_compute_instance" "nfs_server" {
 
 
   metadata = {
-    ssh-keys = "user:${file("C:/Users/Eduardo/.ssh/id_rsa.pub")}"
+    ssh-keys = "user:${file(var.pub_directory)}"
   }
 
   service_account {
-    email  = "843462201394-compute@developer.gserviceaccount.com"
+    email  = var.service_account_email
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 }
