@@ -4,7 +4,6 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
-terraform/test-cluster/*
 # Crash log files
 crash.log
 crash.*.log
