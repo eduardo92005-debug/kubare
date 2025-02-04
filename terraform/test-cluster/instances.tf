@@ -9,7 +9,7 @@ resource "google_compute_instance" "k3s-masters" {
       image = "ubuntu-os-cloud/ubuntu-2204-lts"
     }
   }
-  
+
   network_interface {
     network = "default"
     access_config {
@@ -41,7 +41,7 @@ resource "google_compute_instance" "k3s-workers" {
       image = "ubuntu-os-cloud/ubuntu-2204-lts"
     }
   }
-  
+
   network_interface {
     network = "default"
     access_config {}
