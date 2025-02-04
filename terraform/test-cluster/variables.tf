@@ -19,7 +19,7 @@ variable "instances_workers" {
   ]
 }
 
-variable "service_accout_email" {
+variable "service_account_email" {
   type = string
   sensitive = true
 }
