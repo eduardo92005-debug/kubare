@@ -34,7 +34,7 @@ jobs:
         working-directory: terraform/test-cluster
 
       - name: Lint Terraform
-        uses: terraform-linters/tflint-action@v0.6.0
+        uses: terraform-linters/setup-tflint@v4
         with:
           working-directory: terraform/test-cluster
 
