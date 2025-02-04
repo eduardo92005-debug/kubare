@@ -6,7 +6,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: winovk8s-app
+  name: winovk8s
   namespace: winovk8s
   labels:
     app: winovk8s
@@ -23,18 +23,32 @@ spec:
       containers:
         - name: nginx
           image: nginx:latest
-          volumeMounts:
-            - name: winov-data-volume
-              mountPath: /nfs/winov-data
           ports:
             - containerPort: 80
-        - name: consul
-          image: hashicorp/consul:latest
           volumeMounts:
             - name: winov-data-volume
               mountPath: /nfs/winov-data
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+            requests:
+              cpu: "250m"
+              memory: "128Mi"
+        - name: consul
+          image: hashicorp/consul:latest
           ports:
             - containerPort: 8500
+          volumeMounts:
+            - name: winov-data-volume
+              mountPath: /nfs/winov-data
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+            requests:
+              cpu: "250m"
+              memory: "128Mi"
       volumes:
         - name: winov-data-volume
           persistentVolumeClaim:
@@ -67,15 +81,16 @@ spec:
       targetPort: 8500
       protocol: TCP
   type: LoadBalancer
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: winovk8s-ingress
   namespace: winovk8s
   annotations:
-    kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
+  ingressClassName: traefik
   rules:
     - host: winovk8s.example.com
       http:
@@ -110,7 +125,6 @@ spec:
   nfs:
     path: /nfs/winov-data
     server: 34.60.118.115
-
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

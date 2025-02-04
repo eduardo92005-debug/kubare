@@ -1,12 +1,12 @@
 ---
-- name: Ajustar configuração do SSH para permitir login root com chave
+- name: Root Login
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^PermitRootLogin\s+'
     line: 'PermitRootLogin prohibit-password'
     backup: yes
 
-- name: Garantir que o diretório .ssh do root existe
+- name: Create .ssh directory
   ansible.builtin.file:
     path: /root/.ssh
     state: directory
@@ -14,13 +14,13 @@
     owner: root
     group: root
 
-- name: Adicionar chave pública autorizada para o root
+- name: Add public key
   ansible.builtin.authorized_key:
     user: root
     state: present
     key: "{{ lookup('file', 'files/ssh.txt') }}"
 
-- name: Instalar pacotes NFS (nfs-kernel-server e nfs-common)
+- name: Install NFS Common
   ansible.builtin.apt:
     name:
       - nfs-common

@@ -1,0 +1,68 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Validate Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+
+      - name: Initialize Terraform
+        run: terraform init
+        working-directory: terraform/test-cluster
+
+      - name: Validate Terraform
+        run: terraform validate
+        working-directory: terraform/test-cluster
+
+      - name: Check Terraform Format
+        run: terraform fmt -check -recursive
+        working-directory: terraform/test-cluster
+
+      - name: Lint Terraform
+        uses: terraform-linters/tflint-action@v0.6.0
+        with:
+          working-directory: terraform/test-cluster
+
+  kubernetes:
+    name: Lint Kubernetes Manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install kubeval
+        run: |
+          curl -LO https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64
+          chmod +x kubeval-linux-amd64
+          sudo mv kubeval-linux-amd64 /usr/local/bin/kubeval
+
+      - name: Validate Kubernetes Manifests
+        run: kubeval manifests/*.yaml
+
+  ansible:
+    name: Lint Ansible Playbooks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Ansible Lint
+        run: pip install ansible-lint
+
+      - name: Run Ansible Lint
+        run: ansible-lint ansible/
