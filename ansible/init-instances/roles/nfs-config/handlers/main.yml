@@ -1,5 +1,5 @@
 ---
-- name: Reiniciar NFS Kernel Server
+- name: Restart NFS Server
   ansible.builtin.service:
     name: nfs-kernel-server
     state: restarted
