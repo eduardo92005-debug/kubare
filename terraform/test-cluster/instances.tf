@@ -87,3 +87,4 @@ resource "google_compute_instance" "nfs_server" {
 }
 
 
+

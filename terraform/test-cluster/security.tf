@@ -35,7 +35,7 @@ resource "google_compute_firewall" "allow_k3s_ports" {
 }
 
 resource "google_compute_address" "static_ip" {
-  name   = "k3s-static-ip"
+  name   = "k3s-master-static-ip"
   region = "us-central1"
 }
 

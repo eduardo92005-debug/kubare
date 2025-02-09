@@ -4,7 +4,12 @@
   roles:
     - nfs-config
 
-- hosts: nodes
+- hosts: masters
+  become: yes
+  roles:
+    - ssh-config
+
+- hosts: workers
   become: yes
   roles:
     - ssh-config

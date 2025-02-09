@@ -1,4 +1,4 @@
-service_accout_email = "xxxxxxxxxxxxxxxxxxx-compute@developer.gserviceaccount.com"
+service_account_email = "xxxxxxxxxxxxxxxxxxx-compute@developer.gserviceaccount.com"
 pub_directory        = "C:/Users/blablabla/.ssh/id_rsa.pub"
 master_ip            = "xxx.xxx.xxx.xxx"
 node1_ip             = "xxx.xxx.xxx.xxx"
